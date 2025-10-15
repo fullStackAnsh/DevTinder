@@ -1,17 +1,16 @@
 const express=require('express');
 const app=express()
 
-app.post('/user',(req,res)=>{
-   //This sends the URL query Param .
-   //ex:localhost:3000/user?username=Ansh
-    res.send(req.query);
-});
-
-app.post('/test/:testId',(req,res)=>{
-   //This sends the URL Param.
-   //ex:localhost:3000/test/Ansh
-    res.send(req.params);
-});
+//A middleware that will redirect to the next route.
+app.get('/user',(req,res,next)=>{
+    console.log("Middleware calling");
+    //next() calls the next route.
+    next();
+})
+app.get('/user',(req,res)=>{
+    //On calling of next() , this route handler is executed
+    res.send("Second Route Handler");
+})
 
 app.listen(3000,()=>{
     console.log("This server is running at port 3000");
