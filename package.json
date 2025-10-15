@@ -4,7 +4,7 @@
   "description": "A Place for devs to find fellow devs for side projects.",
   "license": "ISC",
   "author": "",
-  "type": "commonjs",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",

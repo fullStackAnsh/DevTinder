@@ -8,3 +8,4 @@
 //req.query and req.params. 
 
 //Multi-Route Handlers 
+//app.use() and app.all()

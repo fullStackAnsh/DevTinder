@@ -1,15 +1,10 @@
-const express=require('express');
+import express from 'express'
+import { adminAuth } from './middleware/auth.js';
 const app=express()
 
-//A middleware that will redirect to the next route.
-app.get('/user',(req,res,next)=>{
-    console.log("Middleware calling");
-    //next() calls the next route.
-    next();
-})
-app.get('/user',(req,res)=>{
-    //On calling of next() , this route handler is executed
-    res.send("Second Route Handler");
+//Dummy Middleware adminAuth is called 
+app.get('/admin/getAllData',adminAuth,(req,res)=>{
+    res.send("Fetching all data")
 })
 
 app.listen(3000,()=>{
