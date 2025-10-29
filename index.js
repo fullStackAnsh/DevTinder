@@ -2,18 +2,20 @@ import express from 'express'
 import { connectDB } from './config/database.js';
 import { adminAuth } from './middleware/auth.js';
 import { User } from './model/user.js';
+
 const app=express()
+//middleware to parse json
+app.use(express.json())
 
 app.post("/user",async (req,res)=>{
-   await User.create({
-        name:"ansh",
-        email:"ansh@gmail.com",
-        password:"13july2004",
-        age:20,
-        gender:"male"
-    });
-   
-    res.send("USer saved successfully");
+
+   const user = new User(req.body);
+
+   try{
+    await user.save();
+    res.send("USer saved successfully");}
+    catch(err)
+    {res.send(err)}
 })
 
 
