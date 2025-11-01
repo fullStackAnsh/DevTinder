@@ -35,6 +35,31 @@ app.post("/signup",async (req,res) =>{
     {res.send(err.message)}
 })
 
+//Login API
+app.post("/login",async (req,res)=>{
+  try{
+    const {email,password} = req.body;
+    if(!email || !password){throw new Error("Please enter all credentials")}
+    
+    //Checking if user exists
+    const user =await User.findOne({emailId:email});
+    if(!user){
+      throw new Error("User doesn't exist")
+    }
+    //Comparing user password with db password
+    const match=await bcrypt.compare(password,user.password);
+
+    if(match){
+      res.send("Login Successful");
+    }
+    else{
+      res.send("Invalid credentials")
+    }
+  }catch(err){
+    res.send(err.message);
+  }
+})
+
 app.get("/feed",async (req,res)=>{
   try{
    const users=await User.find({});
