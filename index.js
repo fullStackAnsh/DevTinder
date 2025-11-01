@@ -1,23 +1,34 @@
 import express from 'express'
+import bcrypt from 'bcrypt'
 import isEmail from 'validator/lib/isEmail.js';
 import { connectDB } from './config/database.js';
 import { adminAuth } from './middleware/auth.js';
 import { User } from './model/user.js';
+import { validateSignup } from './utils/validateSignup.js';
 
 const app=express()
 //middleware to parse json
 app.use(express.json())
 
 app.post("/signup",async (req,res) =>{
+  try{
+  //Validating data using helper function
+  validateSignup(req.body);
+  
+  const {firstName,lastName,emailId,password} = req.body;
 
-  //email validation using validator.js
-  if(!isEmail(req.body.emailId)){
-    res.send("Email is not a valid email.");
-  }
+  //Encrypt password using bcrypt 
+  const hashedPassword = await bcrypt.hash(password,10);
+  
+  //Save the user
+   const user = new User({
+    firstName:firstName,
+    lastName:lastName,
+    emailId:emailId,
+    password:hashedPassword
+   });
 
-   const user = new User(req.body);
-
-   try{
+  
     await user.save();
     res.send("USer saved successfully");}
     catch(err)

@@ -7,7 +7,8 @@ const userSchema = new Schema({
       required:true
    },
    lastName:{
-      type:String
+      type:String,
+      required:true
    },
    emailId:{
       type:String,
@@ -35,7 +36,6 @@ const userSchema = new Schema({
    },
    skills:{
      type:[String],
-     required:true,
      //custom validation function to check length of array
      validate:{
       validator: function (v) {
