@@ -2,13 +2,16 @@ import express from 'express'
 import bcrypt from 'bcrypt'
 import isEmail from 'validator/lib/isEmail.js';
 import { connectDB } from './config/database.js';
-import { adminAuth } from './middleware/auth.js';
+import { userAuth } from './middleware/auth.js';
 import { User } from './model/user.js';
 import { validateSignup } from './utils/validateSignup.js';
+import jwt from 'jsonwebtoken'
+import cookieParser from 'cookie-parser';
 
 const app=express()
 //middleware to parse json
 app.use(express.json())
+app.use(cookieParser());
 
 app.post("/signup",async (req,res) =>{
   try{
@@ -50,6 +53,11 @@ app.post("/login",async (req,res)=>{
     const match=await bcrypt.compare(password,user.password);
 
     if(match){
+      //Assigning jwt token
+      const token=await jwt.sign({userId:user._id.toString()},"jwtSecret")
+      
+      //Storing it in cookie
+      res.cookie("token",token);
       res.send("Login Successful");
     }
     else{
@@ -60,7 +68,9 @@ app.post("/login",async (req,res)=>{
   }
 })
 
-app.get("/feed",async (req,res)=>{
+
+
+app.get("/feed",userAuth,async (req,res)=>{
   try{
    const users=await User.find({});
    res.send(users);
