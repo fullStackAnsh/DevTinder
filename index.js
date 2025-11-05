@@ -21,7 +21,8 @@ app.post("/signup",async (req,res) =>{
   const {firstName,lastName,emailId,password} = req.body;
 
   //Encrypt password using bcrypt 
-  const hashedPassword = await bcrypt.hash(password,10);
+  const hashedPassword = await User.hashPassword(password);
+  
   
   //Save the user
    const user = new User({

@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
+import bcrypt from 'bcrypt'
 
 const userSchema = new Schema({
    firstName:{
@@ -50,5 +51,11 @@ const userSchema = new Schema({
 
    }
 });
+
+userSchema.statics.hashPassword = async function(userPassword){
+   const hashedPassword = await bcrypt.hash(userPassword,10);
+   return hashedPassword
+}
+
 
 export const User=mongoose.model("User",userSchema);
