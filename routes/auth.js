@@ -48,7 +48,8 @@ router.post("/login",async (req,res)=>{
 
     if(match){
       //Assigning jwt token
-      const token=await jwt.sign({userId:user._id.toString()},"jwtSecret")
+      const token=await jwt.sign({userId:user._id.toString()},"jwtSecret",
+      { expiresIn: '30d' })
       
       //Storing it in cookie
       res.cookie("token",token);
@@ -60,6 +61,17 @@ router.post("/login",async (req,res)=>{
   }catch(err){
     res.send(err.message);
   }
+})
+
+router.post('/logout',(req,res)=>{
+    try{
+      //clear cookie token from browser
+      res.clearCookie('token')
+      res.send("Logout Successful");
+    }
+    catch(err){
+      res.send(err)
+    }
 })
 
 export default router
