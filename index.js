@@ -10,7 +10,7 @@ import cookieParser from 'cookie-parser';
 import authRouter from './routes/auth.js'
 import userRouter from './routes/user.js'
 import profileRouter from './routes/profile.js'
-
+import ConnectionRequestRouter from './routes/connectionRequest.js'
 const app=express()
 //middleware to parse json
 app.use(express.json())
@@ -20,6 +20,7 @@ app.use(cookieParser());
 app.use('/auth',authRouter)
 app.use('/user',userRouter)
 app.use('/profile',profileRouter)
+app.use('/connection/request',ConnectionRequestRouter)  
 
 
 
