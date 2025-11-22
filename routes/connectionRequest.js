@@ -38,4 +38,39 @@ router.post('/:status/:toUserId',userAuth,async(req,res)=>{
     }
 })
 
+
+router.post('/review/:status/:senderId',userAuth,async (req,res)=>{
+   //Initialising logged in user id and sender id
+   const loggedInUser = req.user;
+   const {status,senderId} = req.params;
+   try{
+   //Validating if request exist with status as interested
+   const allowedStatus=["accepted","rejected"]
+
+   if(!allowedStatus.includes(status)){
+    throw new Error("Status not allowed")
+   }
+
+   const ExistingConnectionRequest = await ConnectionRequest.findOne({
+    fromUserId:senderId,
+    toUserId:loggedInUser._id,
+    status:'interested'
+   })
+   
+   if(ExistingConnectionRequest==null){
+    throw new Error("Connection request doesn't exists.")
+
+   }
+
+   //Changing the status to accepted
+   ExistingConnectionRequest.status=status;
+   const data = await ExistingConnectionRequest.save()
+   res.status(200).json({data})
+
+   }
+   catch(err){
+    res.status(400).json({error:err.message})
+   }
+})
+
 export default router;
